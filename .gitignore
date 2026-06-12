@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+.venv/
+venv/
+env/
+ENV/
+
+# Outputs (generated assets — commit only intentional examples)
+outputs/*/
+!outputs/.gitkeep
+
+# Model weights (large; download at runtime)
+models/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Blender temp
+*.blend1
+*.blend2
+
+# Logs
+*.log
+logs/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
