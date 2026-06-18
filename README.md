@@ -26,6 +26,27 @@ python -m car2asset.run \
   --output outputs/example_car
 ```
 
+### No GPU? Use the Colab notebook
+
+Local reconstruction (TripoSR / Hunyuan3D) needs a CUDA GPU with several GB of VRAM.
+If your machine doesn't have one (e.g. a laptop with integrated graphics), run the
+reconstruction step on a free Google Colab GPU instead:
+
+1. Open [`notebooks/colab_reconstruct.ipynb`](notebooks/colab_reconstruct.ipynb) in Colab.
+2. Set runtime to a `T4 GPU`, run all cells, upload your car photo, and download
+   `car_realistic.glb`.
+3. Feed it back into the local pipeline with `--source-mesh`, which skips
+   reconstruction and only runs the lightweight, CPU-friendly steps (cartoon
+   stylisation, preview rendering, export) on your machine:
+
+```bash
+python -m car2asset.run \
+  --input inputs/example_car \
+  --mode both \
+  --quality fast \
+  --source-mesh path/to/car_realistic.glb
+```
+
 ### Outputs
 
 ```

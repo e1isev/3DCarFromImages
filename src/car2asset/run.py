@@ -50,6 +50,16 @@ def main(
     quality: Annotated[Quality, typer.Option("--quality", "-q", help="Quality preset")] = "high",
     export_fbx_flag: Annotated[bool, typer.Option("--fbx/--no-fbx", help="Also export FBX for Unreal/Unity")] = False,
     no_bg_removal: Annotated[bool, typer.Option("--no-bg-removal", help="Skip background removal")] = False,
+    source_mesh: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--source-mesh",
+            help=(
+                "Path to an already-generated realistic .glb (e.g. produced by a cloud GPU "
+                "notebook). Skips local reconstruction and uses this mesh directly."
+            ),
+        ),
+    ] = None,
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
 ) -> None:
     _setup_logging(verbose)
@@ -77,9 +87,14 @@ def main(
 
         # ── Step 2: Realistic mesh ──────────────────────────────────────────
         if mode in ("realistic", "both"):
-            task = progress.add_task("Generating realistic mesh …", total=None)
             realistic_path = output_dir / "car_realistic.glb"
-            generate_realistic_mesh(images, realistic_path, quality=quality)
+            if source_mesh is not None:
+                task = progress.add_task("Using provided source mesh …", total=None)
+                export_glb(source_mesh, realistic_path)
+                progress.update(task, description="[green]Source mesh imported[/green]")
+            else:
+                task = progress.add_task("Generating realistic mesh …", total=None)
+                generate_realistic_mesh(images, realistic_path, quality=quality)
             manifest["outputs"]["realistic_glb"] = str(realistic_path)
 
             if export_fbx_flag:
@@ -103,10 +118,14 @@ def main(
         if mode in ("cartoon", "both"):
             source = realistic_path if mode == "both" else None
             if source is None or not source.exists():
-                # Generate a realistic mesh silently as base even if mode=cartoon
                 source = output_dir / "_base_mesh.glb"
-                progress.add_task("Generating base mesh for cartoon …", total=None)
-                generate_realistic_mesh(images, source, quality="fast")
+                if source_mesh is not None:
+                    progress.add_task("Using provided source mesh …", total=None)
+                    export_glb(source_mesh, source)
+                else:
+                    # Generate a realistic mesh silently as base even if mode=cartoon
+                    progress.add_task("Generating base mesh for cartoon …", total=None)
+                    generate_realistic_mesh(images, source, quality="fast")
 
             task = progress.add_task("Stylising cartoon mesh …", total=None)
             cartoon_path = output_dir / "car_cartoon.glb"
