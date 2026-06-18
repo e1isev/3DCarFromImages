@@ -154,6 +154,23 @@ pip install git+https://github.com/Tencent/Hunyuan3D-2.git
 
 > **VRAM requirements:** ~10 GB (shape), ~21 GB (texture), ~29 GB (both).
 
+**Pre-download the weights.** `from_pretrained` does not reliably auto-fetch
+from the Hub and may fail with `Model path ... not found`. Download the
+snapshot explicitly first, then point the pipeline at the local folder via
+`.env`:
+
+```bash
+pip install -U huggingface_hub
+huggingface-cli download tencent/Hunyuan3D-2mv --local-dir models/Hunyuan3D-2mv
+huggingface-cli download tencent/Hunyuan3D-2   --local-dir models/Hunyuan3D-2   # only needed for --quality ultra
+```
+
+```bash
+# .env
+HUNYUAN3D_SHAPE_MODEL_PATH=models/Hunyuan3D-2mv
+HUNYUAN3D_TEXTURE_MODEL_PATH=models/Hunyuan3D-2
+```
+
 ### TripoSR (`fast`)
 
 Single-image fast reconstruction. Good for iteration and preview.

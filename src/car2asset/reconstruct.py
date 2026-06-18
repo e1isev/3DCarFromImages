@@ -148,7 +148,7 @@ def _run_hunyuan3d(
 
     import torch
 
-    model_id = "tencent/Hunyuan3D-2mv"
+    model_id = settings.hunyuan3d_shape_model_path
     logger.info("Loading Hunyuan3D shape pipeline from %s …", model_id)
 
     pipeline = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained(
@@ -188,7 +188,9 @@ def _apply_hunyuan3d_pbr_texture(mesh, mv_images: list[Image.Image], output_dir:
     import torch
 
     logger.info("Running Hunyuan3D PBR texture generation (requires ~21 GB VRAM) …")
-    tex_pipeline = Hunyuan3DPaintPipeline.from_pretrained("tencent/Hunyuan3D-2", torch_dtype=torch.float16)
+    tex_pipeline = Hunyuan3DPaintPipeline.from_pretrained(
+        settings.hunyuan3d_texture_model_path, torch_dtype=torch.float16
+    )
     tex_pipeline.to(settings.device)
 
     result = tex_pipeline(mesh=mesh, image=mv_images[0])
