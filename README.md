@@ -169,6 +169,12 @@ huggingface-cli download tencent/Hunyuan3D-2   --local-dir models/Hunyuan3D-2   
 # .env
 HUNYUAN3D_SHAPE_MODEL_PATH=models/Hunyuan3D-2mv
 HUNYUAN3D_TEXTURE_MODEL_PATH=models/Hunyuan3D-2
+
+# Hunyuan3D-2mv stores DiT weights under "hunyuan3d-dit-v2-mv", not the
+# library's default "hunyuan3d-dit-v2-0" (that default is for the
+# single-view Hunyuan3D-2 repo). Set this or the pipeline won't find the
+# local snapshot and will try (and fail) to re-download from the Hub.
+HUNYUAN3D_SHAPE_SUBFOLDER=hunyuan3d-dit-v2-mv
 ```
 
 ### TripoSR (`fast`)

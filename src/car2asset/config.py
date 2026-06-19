@@ -38,6 +38,12 @@ class Settings(BaseSettings):
     hunyuan3d_shape_model_path: str = Field(
         default="tencent/Hunyuan3D-2mv", alias="HUNYUAN3D_SHAPE_MODEL_PATH"
     )
+    # The Hunyuan3D-2mv repo stores weights under "hunyuan3d-dit-v2-mv" (or the
+    # -fast/-turbo variants), not the library's default "hunyuan3d-dit-v2-0"
+    # (that's the single-view repo's subfolder).
+    hunyuan3d_shape_subfolder: str = Field(
+        default="hunyuan3d-dit-v2-mv", alias="HUNYUAN3D_SHAPE_SUBFOLDER"
+    )
     hunyuan3d_texture_model_path: str = Field(
         default="tencent/Hunyuan3D-2", alias="HUNYUAN3D_TEXTURE_MODEL_PATH"
     )

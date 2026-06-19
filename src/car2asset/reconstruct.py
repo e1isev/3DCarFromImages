@@ -153,6 +153,7 @@ def _run_hunyuan3d(
 
     pipeline = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained(
         model_id,
+        subfolder=settings.hunyuan3d_shape_subfolder,
         torch_dtype=torch.float16,
         use_safetensors=True,
     )
